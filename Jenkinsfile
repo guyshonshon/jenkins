@@ -7,6 +7,7 @@ pipeline {
             steps {
                 echo '======= build stage ========'
                 echo 'Building application...'
+                sh 'echo "FAKKKKKKK" > app.txt'
             }
         }
 
@@ -14,13 +15,17 @@ pipeline {
             steps {
                 echo '======= test stage ========'
                 echo 'Running tests...'
+                sh 'test -f app.txt'
             }
+            
         }
 
         stage('Deploy') {
             steps {
                 echo '======= deploy stage ========'
                 echo 'Deploying application...'
+                sh 'mkdir -p deploy'
+                sh 'cp app.txt deploy/'
             }
         }
     }

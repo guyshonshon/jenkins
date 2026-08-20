@@ -5,6 +5,7 @@ pipeline {
         APP_VERSION = '1.0'
         APP_NAME = 'guy'
         DOCKER_REPO = 'guyshonshon@jenkins'
+        FILE_TO_TEST = 'script.py'
     }
 
     stages {

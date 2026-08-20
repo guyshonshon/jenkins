@@ -1,12 +1,19 @@
 pipeline {
     agent any
 
+    environment {
+        APP_VERSION = '1.0'
+        APP_NAME = 'guy'
+        DOCKER_REPO = 'guyshonshon@jenkins'
+    }
+
     stages {
 
         stage('Build') {
             steps {
                 echo '======= build stage ========'
-                echo 'Building application...'
+                echo "APP_NAME=${APP_NAME}, APP_VERSION=${APP_VERSION}, DOCKER_REPO=${DOCKER_REPO}"
+
                 sh 'echo "hey app is now alive" > app.txt'
             }
         }
@@ -14,7 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo '======= test stage ========'
-                echo 'Running tests...'
+                echo 'Tests run on pipeline "{$JOB_NAME}", build: {$BUILD_NUMBER}'
                 sh 'test -f app.txt'
             }
             

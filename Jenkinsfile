@@ -5,7 +5,7 @@ pipeline {
         APP_VERSION = '1.0'
         APP_NAME = 'guy'
         DOCKER_REPO = 'guyshonshon@jenkins'
-        FILE_TO_TEST = 'script.py'
+        FILE_TO_TEST = './build-info.txt'
     }
 
     stages {
@@ -14,18 +14,28 @@ pipeline {
             steps {
                 echo '======= build stage ========'
                 echo "APP_NAME=${APP_NAME}, APP_VERSION=${APP_VERSION}, DOCKER_REPO=${DOCKER_REPO}"
-
-                sh 'echo "hey app is now alive" > app.txt'
+                sh 'echo "app" > app.txt'
+                // idk if this should be in multi-lines but w.e
+                sh 'echo "APP_NAME=${APP_NAME}\nBUILD_NUMBER=${BUILD_NUMBER}\nDATE=$(date)\n" > build-info.txt'
             }
         }
 
-        stage('Test') {
-            steps {
-                echo '======= test stage ========'
-                echo "Tests run on pipeline '${JOB_NAME}', build: '${BUILD_NUMBER}'"
-                sh 'test -f app.txt'
+        stage('Parallel Tests') {
+            parallel {
+
+                stage('file test') {
+                    steps {
+                        //-f returns exit 0 on success and exit 1 on failure
+                        sh 'test -f "app.txt"' 
+                    }
+                }
+
+                stage('build-info test') {
+                    steps {
+                        sh 'python3 script.py "$FILE_TO_TEST" "$BUILD_NUMBER"'
+                    }
+                }
             }
-            
         }
 
         stage('Deploy') {
@@ -37,6 +47,8 @@ pipeline {
             }
         }
     }
+
+
     post {
         always {
             cleanWs()

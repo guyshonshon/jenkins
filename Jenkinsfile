@@ -21,7 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo '======= test stage ========'
-                echo 'Tests run on pipeline "{$JOB_NAME}", build: {$BUILD_NUMBER}'
+                echo 'Tests run on pipeline "{$env.JOB_NAME}", build: {$env.BUILD_NUMBER}'
                 sh 'test -f app.txt'
             }
             

@@ -7,7 +7,7 @@ pipeline {
             steps {
                 echo '======= build stage ========'
                 echo 'Building application...'
-                sh 'echo "FAKKKKKKK" > app.txt'
+                sh 'echo "hey app is now alive" > app.txt'
             }
         }
 
@@ -31,7 +31,7 @@ pipeline {
     }
     post {
         always {
-            deleteDir()
+            cleanWs()
         }
     }
 }
